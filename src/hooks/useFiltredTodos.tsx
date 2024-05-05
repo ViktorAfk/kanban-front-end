@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "./redux-hooks";
 import { getFiltteredTodos } from "../utiels";
 import { selectTodosValue, setTodos } from "../redux/services/todos";
 
-export const useFilteredTodos = (boardId: string) => {
+export const useFilteredTodos = (boardId: string | null) => {
   const dispatch = useAppDispatch();
   const { data, error: hasError } = useGetTodosInBoardQuery(boardId, {
     skip: !boardId,

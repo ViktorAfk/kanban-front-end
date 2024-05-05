@@ -1,10 +1,11 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Button, Container, Flex, Heading } from "@chakra-ui/react";
 import "./App.css";
 import { FormIssue } from "./components/BoardForm";
 import { useAppSelector } from "./hooks/redux-hooks";
 import { setBoardIdValue } from "./redux/services/board";
+import { TodosTable } from "./components/TodosTable";
 
-function App() {
+export const App = () => {
   const board = useAppSelector(setBoardIdValue);
   return (
     <main>
@@ -14,14 +15,16 @@ function App() {
         </Heading>
         <FormIssue />
         {board && (
-          <Heading as={"h2"} size={"md"} mb={"8"} alignSelf="flex-start">
-            Board ID: {board}
-          </Heading>
+          <Flex w={'100%'} justify={'space-between'} align={'center'} gap={4} mb={"8"}>
+            <Heading as={"h2"} size={"md"}>
+              Board ID: {board}
+            </Heading>
+            <Button>Add todo</Button>
+          </Flex>
         )}
-        {/* <IssuesTable userRepo={userRepo} /> */}
+        <TodosTable boardId={board} />
       </Container>
     </main>
   );
 }
 
-export default App;

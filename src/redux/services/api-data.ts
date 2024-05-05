@@ -8,7 +8,7 @@ export const todosApi = createApi({
   }),
   tagTypes: ["todos"],
   endpoints: (builder) => ({
-    getTodosInBoard: builder.query<ApiResponse, string>({
+    getTodosInBoard: builder.query<ApiResponse, string | null>({
       query: (boardId) => ({ url: `todos/${boardId}`, method: "Get" }),
     }),
     addNewTodo: builder.mutation<Todo, Omit<Todo, "id">>({
@@ -25,5 +25,4 @@ export const todosApi = createApi({
   }),
 });
 
-export const {useAddNewTodoMutation, useGetTodosInBoardQuery} = todosApi;
-
+export const { useAddNewTodoMutation, useGetTodosInBoardQuery } = todosApi;
