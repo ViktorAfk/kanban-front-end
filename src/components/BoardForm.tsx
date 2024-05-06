@@ -19,9 +19,8 @@ export const FormIssue = () => {
 
   const onHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    const preparedValue = value.trim();
 
-    setQuery(preparedValue);
+    setQuery(value);
   };
 
   const onHanleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
@@ -29,16 +28,19 @@ export const FormIssue = () => {
 
     setIsDisabled(true);
     setIsError(false);
-
+    const preparedValue = query.trim();
     const shouldStartWith = /^(?=.*[a-zA-Z])(?=.*\d).{10,}$/;
 
-    if (!shouldStartWith.test(query)) {
+    if (!shouldStartWith.test(preparedValue)) {
       setIsError(true);
+      setTimeout(()=> {
+        setIsError(false);
+      },2000);
       setIsDisabled(false);
       return;
     }
 
-    dispatch(setBoard(query));
+    dispatch(setBoard(preparedValue));
     setIsDisabled(false);
     setQuery("");
   };
@@ -56,13 +58,13 @@ export const FormIssue = () => {
     >
       <Box w="100%">
         <FormLabel visibility={"hidden"} id="form-issue">
-          Enter your repo
+          Enter board ID
         </FormLabel>
         <Box display="flex" gap="4">
           <Input
             w="100%"
             aria-label="form-issue"
-            placeholder="Enter your repo"
+            placeholder="Enter board ID"
             type="text"
             bgColor="white"
             value={query}

@@ -1,7 +1,7 @@
-type Status = "Todo" | "In progress" | "Done";
+export type Status = "Todo" | "In progress" | "Done";
 
 export interface Todo {
-  id: string;
+  _id: string;
   title: string;
   body: string;
   status: Status;

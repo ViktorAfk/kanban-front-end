@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   Alert,
   AlertDescription,
@@ -13,25 +13,34 @@ import { useFilteredTodos } from "../hooks/useFiltredTodos";
 import { setTodos } from "../redux/services/todos";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { getNewItemsDestination } from "../utiels";
+import {
+  useUpdateTodoMutation,
+} from "../redux/services/api-data";
+import { Todo } from "../types/interface";
 
 interface Props {
   boardId: string | null;
+  openModal: () => void;
+  editTodo: (todo: Todo) => void;
 }
 
-export const TodosTable: FC<Props> = ({ boardId }) => {
+export const TodosTable: FC<Props> = ({ boardId, openModal, editTodo }) => {
   const { todos, hasError } = useFilteredTodos(boardId);
-
+  const [updateTodo] = useUpdateTodoMutation();
   const dispatch = useAppDispatch();
 
   const handleDragDrop = (results: DropResult) => {
-    const newItems = getNewItemsDestination(todos, results);
+    const data = getNewItemsDestination(todos, results);
 
-    if (newItems) {
-      dispatch(setTodos(newItems));
+    if (data?.newItems) {
+      dispatch(setTodos(data.newItems));
+    }
 
+    if (data?.dataToUpdate) {
+      updateTodo(data?.dataToUpdate).unwrap();
     }
   };
-
+  useEffect(() => {}, []);
   return (
     <>
       {hasError ? (
@@ -54,7 +63,13 @@ export const TodosTable: FC<Props> = ({ boardId }) => {
         >
           <DragDropContext onDragEnd={handleDragDrop}>
             {todos.map(({ name, items }) => (
-              <DraggableColumn todos={items} columnTitle={name} key={name} />
+              <DraggableColumn
+                editTodo={editTodo}
+                openModal={openModal}
+                todos={items}
+                columnTitle={name}
+                key={name}
+              />
             ))}
           </DragDropContext>
         </Grid>
