@@ -85,7 +85,7 @@ export const DraggableColumn: FC<Props> = ({
                         </Heading>
                       </CardHeader>
                       <CardBody h={"100px"} p={0} overflowY={"scroll"}>
-                        <Text align={"left"} p={2}>
+                        <Text align={'initial'} p={2}>
                           {todo.body}
                         </Text>
                       </CardBody>
@@ -103,7 +103,6 @@ export const DraggableColumn: FC<Props> = ({
                           <Button
                             onClick={() => {
                               onHandleDelete(todo._id, todo.status);
-                              
                             }}
                             backgroundColor={"teal"}
                           >
