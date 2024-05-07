@@ -8,6 +8,7 @@ import { ColumnHeader, TodoItem } from "../types/interface";
 export const useFilteredTodos = (boardId: string | null) => {
   const dispatch = useAppDispatch();
   const { data, error: hasError } = useGetTodosInBoardQuery(boardId, {
+    skip: !boardId,
     refetchOnReconnect: true,
     refetchOnMountOrArgChange: true,
     refetchOnFocus: true,
