@@ -8,22 +8,30 @@ export const todosApi = createApi({
   }),
   tagTypes: ["todos"],
   endpoints: (builder) => ({
-    getTodosInBoard: builder.query<ApiResponse, string>({
-      query: (boardId) => ({ url: `todos/${boardId}`, method: "Get" }),
+    getTodosInBoard: builder.query<ApiResponse, string | null>({
+      query: (boardId) => ({ url: `todos/${boardId}`, method: "GET" }),
     }),
-    addNewTodo: builder.mutation<Todo, Omit<Todo, "id">>({
-      query: (body) => ({ url: "todos/", method: "Post", body }),
-    }),
-
-    deleteTodo: builder.mutation({
-      query: (todoId: string) => ({ url: `todos/${todoId}`, method: "Delete" }),
+    addNewTodo: builder.mutation<Todo, Omit<Todo, "_id">>({
+      query: (body) => ({ url: "todos/", method: "POST", body }),
     }),
 
-    updateTods: builder.mutation<Todo, Partial<Todo>>({
-      query: (todo) => ({ url: `todos/${todo.id}`, method: "Post", todo }),
+    deleteTodo: builder.mutation<{ success: boolean; id: string }, string>({
+      query: (id) => ({ url: `todos/${id}`, method: "DELETE" }),
+    }),
+
+    updateTodo: builder.mutation<Todo, Partial<Todo> & Pick<Todo, "_id">>({
+      query: ({ _id, ...todo }) => ({
+        url: `todos/${_id}`,
+        method: "PATCH",
+        body: todo,
+      }),
     }),
   }),
 });
 
-export const {useAddNewTodoMutation, useGetTodosInBoardQuery} = todosApi;
-
+export const {
+  useGetTodosInBoardQuery,
+  useAddNewTodoMutation,
+  useDeleteTodoMutation,
+  useUpdateTodoMutation,
+} = todosApi;
